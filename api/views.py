@@ -6,12 +6,15 @@ from .serializers import UserSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-
+from django.shortcuts import get_object_or_404
 
 @api_view(['POST'])
 def login(request):
-    return Response({"login"})
-
+    user = get_object_or_404(User,username=request.data['username'])
+    if user.check_password(request.data['password']):
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    token = Token.objects.create(user=user)
+    return Response({"token":token.key})
 @api_view(['POST'])
 def register(request):
     ser = UserSerializer(data = request.data)
