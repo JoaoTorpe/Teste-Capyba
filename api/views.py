@@ -13,7 +13,7 @@ from django.shortcuts import get_object_or_404
 def login(request):
     user = get_object_or_404(User,username=request.data['username'])
 
-    if user.check_password(request.data['password']):
+    if not user.check_password(request.data['password']):
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     token, created = Token.objects.get_or_create(user=user)
@@ -44,3 +44,21 @@ def logout(request):
    except Token.DoesNotExist:
        return Response({"detail": "Token não encontrado."}, status=status.HTTP_400_BAD_REQUEST)
    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])  
+def change_password(request):
+    user = request.user 
+
+   
+    current_password = request.data.get('current_password')
+    new_password = request.data.get('new_password')
+  
+   
+    if not user.check_password(current_password):
+        return Response({"error": "A senha atual está incorreta."}, status=status.HTTP_400_BAD_REQUEST)
+
+ 
+    user.set_password(new_password)
+    user.save()
+
+    return Response({"success": "A senha foi alterada com sucesso!"}, status=status.HTTP_200_OK)
