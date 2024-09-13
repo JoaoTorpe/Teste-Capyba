@@ -5,7 +5,7 @@ from .serializers import FilmeSerializer
 from .models import Filme
 from .CustomPagination import CustomPagination
 @api_view(['GET'])
-
+@permission_classes([IsAuthenticated])
 def filmes(request):
    #Tamanho da pagina para paginacao
    page_size = request.query_params.get('page_size', None)
