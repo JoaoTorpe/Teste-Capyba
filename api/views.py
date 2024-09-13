@@ -2,8 +2,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import  TokenAuthentication
-from .serializers import UserSerializer
+from .serializers import UserSerializer ,UserUpdateSerializer
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
@@ -44,6 +43,8 @@ def logout(request):
    except Token.DoesNotExist:
        return Response({"detail": "Token não encontrado."}, status=status.HTTP_400_BAD_REQUEST)
    
+
+ #Muda a senha do usuario logado, com a confirmacao da senha atual  
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])  
 def change_password(request):
@@ -62,3 +63,16 @@ def change_password(request):
     user.save()
 
     return Response({"success": "A senha foi alterada com sucesso!"}, status=status.HTTP_200_OK)
+
+#Endpoint para alterar cadastro de usuario, muda o nome e o email do usuario atual
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user_data(request):
+    user = request.user
+
+    ser = UserUpdateSerializer(user,request.data,partial=True)
+    if ser.is_valid():
+        ser.save()
+        return Response(status=status.HTTP_200_OK)
+    
+    return Response(status=status.HTTP_400_BAD_REQUEST)
