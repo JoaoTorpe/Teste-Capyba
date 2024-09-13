@@ -7,3 +7,9 @@ class UserSerializer(serializers.ModelSerializer):
 
         model = User
         fields = ['id','username','password','email']
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta(object):
+        model = User
+        fields = ['username','email']
