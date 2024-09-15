@@ -35,3 +35,7 @@ class TestesAutenticacao(APITestCase):
     def test_login_falha(self):
         response = self.client.post(reverse('login'), {'email': self.email, 'password': 'senhaerrada'})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)   
+
+    def test_register_sucesso(self):
+       response = self.client.post(reverse('register'),{'username':'novo_user','email':'user@hotmail.com','password':'senha'})
+       self.assertEqual(response.status_code, status.HTTP_201_CREATED)    
