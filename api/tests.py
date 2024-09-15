@@ -31,3 +31,7 @@ class TestesAutenticacao(APITestCase):
         response = self.client.post(reverse('login'), {'email': self.email, 'password': self.password})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.data)
+
+    def test_login_falha(self):
+        response = self.client.post(reverse('login'), {'email': self.email, 'password': 'senhaerrada'})
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)   
