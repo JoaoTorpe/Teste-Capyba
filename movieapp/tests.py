@@ -32,4 +32,8 @@ class TestesFilmes(APITestCase):
      Filme.objects.create(titulo="Filme 2", genero="Comédia", premiado=False, ano_de_lancamento=2021)
      Filme.objects.create(titulo="Filme 3", genero="Ação", premiado=True, ano_de_lancamento=2022)
         
-    
+    def test_filmes_lista(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['response']), 3)
