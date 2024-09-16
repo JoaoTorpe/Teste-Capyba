@@ -80,4 +80,10 @@ class TestesFilmes(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get(reverse('filmes'), {'page_size': 2,'page':3})
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_filmes_filtro_por_premiado(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'), {'premiado': 'True'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['response']), 2)    
            
