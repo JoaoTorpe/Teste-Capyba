@@ -61,3 +61,9 @@ class TestesAutenticacao(APITestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.username, 'novonome')
         self.assertEqual(self.user.email, 'novo@email.com')
+
+    def test_logout_sucesso(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post(reverse('logout'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+       
