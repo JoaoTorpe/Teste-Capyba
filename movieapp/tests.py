@@ -68,4 +68,10 @@ class TestesFilmes(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['response']), 2)    
 
-       
+    def test_filmes_pagination_com_page(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'), {'page_size': 2,'page':2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titulo_response = response.data['response'][0]['titulo']
+        self.assertEqual(len(response.data['response']), 1,)
+        self.assertEqual(titulo_response,'Filme 3')     
