@@ -53,3 +53,11 @@ class TestesAutenticacao(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.post(reverse('changepass'),{"current_password":self.password,"new_password":"1234"})
         self.assertEqual(response.status_code,status.HTTP_200_OK)
+
+    def test_update_user_data_sucesso(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.put(reverse('updatedata'), {'username': 'novonome', 'email': 'novo@email.com'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.username, 'novonome')
+        self.assertEqual(self.user.email, 'novo@email.com')
