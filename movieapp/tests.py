@@ -61,3 +61,11 @@ class TestesFilmes(APITestCase):
         for i in response.data['response']:
            titulos_filmes.append(i['titulo'])
         self.assertEqual(titulos_filmes, ['Filme 1', 'Filme 2', 'Filme 3'])        
+
+    def test_filmes_pagination(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'), {'page_size': 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['response']), 2)    
+
+       
