@@ -2,8 +2,57 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import FilmeSerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from .models import Filme
 from .CustomPagination import CustomPagination
+
+
+@extend_schema(
+    summary="Listagem de filmes",
+    description="Endpoint para listar filmes com suporte a busca, filtro por premiado e ordenação.",
+    parameters=[
+         OpenApiParameter(
+            name='page',
+            type=int,
+            location=OpenApiParameter.QUERY,
+            description='Decide qual pagina sera listada (Precisa definir o page_size para funcionar)',
+            required=False,
+            
+        ),
+        OpenApiParameter(
+            name='page_size',
+            type=int,
+            location=OpenApiParameter.QUERY,
+            description='Numero de itens por pagina (paginação)',
+            required=False,
+            
+        ),
+        OpenApiParameter(
+            name='search',
+            type=str,
+            location=OpenApiParameter.QUERY,
+            description='Busca pelo titulo ou genero do filme',
+            required=False
+        ),
+        OpenApiParameter(
+            name='premiado',
+            type=str,
+            location=OpenApiParameter.QUERY,
+            description='Filtrar por filmes premiados (True/False)',
+            required=False
+        ),
+        OpenApiParameter(
+            name='ordering',
+            type=str,
+            location=OpenApiParameter.QUERY,
+            description='Ordenar por titulo ou ano de lançamento ("titulo" ou "ano_de_lancamento")',
+            required=False
+        ),
+    ],
+    responses={
+        200: FilmeSerializer(many=True)
+    }
+)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def filmes(request):
