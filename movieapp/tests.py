@@ -75,3 +75,9 @@ class TestesFilmes(APITestCase):
         titulo_response = response.data['response'][0]['titulo']
         self.assertEqual(len(response.data['response']), 1,)
         self.assertEqual(titulo_response,'Filme 3')     
+
+    def test_filmes_pagination_buscando_page_que_nao_existe(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'), {'page_size': 2,'page':3})
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+           
