@@ -6,7 +6,7 @@ from .serializers import UserSerializer ,UserUpdateSerializer,LoginSerializer,Re
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from drf_spectacular.utils import extend_schema,OpenApiParameter, OpenApiExample, inline_serializer, OpenApiRequest,OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiRequest
 from django.shortcuts import get_object_or_404
 
 @extend_schema(
