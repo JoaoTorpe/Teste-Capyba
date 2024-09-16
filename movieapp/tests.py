@@ -43,3 +43,12 @@ class TestesFilmes(APITestCase):
         response = self.client.get(reverse('filmes'), {'search': 'Ação'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['response']), 2)   
+
+    def test_filmes_ordering_por_ano_de_lancamento(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'), {'ordering': 'ano_de_lancamento'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        titulos_filmes = []
+        for i in response.data['response']:
+           titulos_filmes.append(i['titulo'])
+        self.assertEqual(titulos_filmes, ['Filme 1', 'Filme 2', 'Filme 3'])    
