@@ -37,3 +37,9 @@ class TestesFilmes(APITestCase):
         response = self.client.get(reverse('filmes'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['response']), 3)
+
+    def test_filmes_search(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('filmes'), {'search': 'Ação'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data['response']), 2)   
